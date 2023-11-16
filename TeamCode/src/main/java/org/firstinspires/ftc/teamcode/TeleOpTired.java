@@ -27,7 +27,7 @@ public class TeleOpTired extends LinearOpMode {
     public void runOpMode(){
         initialize();
         double curPos = 0.5;
-        double armPos = 0;
+        double armPos = 0.5;
 
         waitForStart();
 
@@ -53,36 +53,43 @@ public class TeleOpTired extends LinearOpMode {
             double modifier = .75;
             armextend.setPower(extendPower * modifier);
 
-
-            if(gamepad2.right_bumper){
-                armPos += .001;
-                dustpan.setPosition(armPos);
+            //Back servo for lifting arm
+            double liftMax = .75;
+            if(gamepad1.dpad_down){
+                armPos += .0006;
+                armlift.setPosition(armPos);
+                if(armlift.getPosition()>liftMax){
+                    break;
+                }
             }
-
-            if(gamepad2.left_bumper){
-                armPos += .001;
-                dustpan.setPosition(armPos);
+            if(gamepad1.dpad_up){
+                armPos -= .0006;
+                armlift.setPosition(armPos);
             }
+            /*
+            while(gamepad2.right_bumper){
+                armPos += .001  ;
+                armlift.setPosition(armPos);
+            }
+            while(gamepad2.left_bumper){
+                armPos -= .001;
+                armlift.setPosition(armPos);
+            }
+            */
 
+            //Front servo for dustpan
             if(gamepad2.dpad_down){
-                curPos += .001;
+                curPos += .0006;
                 dustpan.setPosition(curPos);
             }
             if(gamepad2.dpad_up){
-                curPos -= .001;
+                curPos -= .0006;
                 dustpan.setPosition(curPos);
             }
 
-            /*
-            if(gamepad2.right_bumper){
 
-                armlift.setPosition(Servo.MAX_POSITION);
 
-            }else if(gamepad2.left_bumper){
-
-                armlift.setPosition(Servo.MIN_POSITION);
-
-            }
+          /*
             tired,, if statements might be redundant/harmful
 
 
@@ -90,6 +97,7 @@ public class TeleOpTired extends LinearOpMode {
             * Will only fully extend or retract
             * evil
             * may also break
+
             double extensionIncrement = Servo.MAX_POSITION/20;
             if(gamepad2.right_bumper){
                 while(gamepad2.right_bumper) {
@@ -100,6 +108,7 @@ public class TeleOpTired extends LinearOpMode {
                     armlift.setPosition(armlift.getPosition() - extensionIncrement);
                 }
             }
+
              */
 
             telemetry.addData("Status", "Initialized");
